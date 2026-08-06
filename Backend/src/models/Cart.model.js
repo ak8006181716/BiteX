@@ -2,23 +2,38 @@
 import mongoose from "mongoose";
 
 
+const cartItemSchema = new mongoose.Schema({
+    menuItem:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'MenuItem', 
+        required:true,
+    },
+    quantity:{
+        type:Number,
+        required:true,
+        default:1,
+        min:1,
+    },
+},{_id:false});
+
+
+
+
 const cartSchema = new mongoose.Schema({
-    user:{
+    customer:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
         required:true,
     },
-    items:[{
+    restaurant:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'MenuItem',
-    }],
-    isActive:{
-        type:Boolean,
-        default:true,
+        ref:'Restaurant',
+        required:true,
     },
-    
-    
-    
+    items:{
+        type:[cartItemSchema],
+        default:[],
+    },
 },{timestamps: true});
 
 

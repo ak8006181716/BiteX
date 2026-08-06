@@ -7,6 +7,24 @@ const categorySchema = new mongoose.Schema ({
         required:true,
         trim:true,
     },
+    restaurant:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Restaurant',
+        required:true,
+    },
+    description:{
+        type:String,
+        trim:true,
+    },
+    categoryImage:{
+        type:String,
+        default:"",
+    },
+    isActive:{
+        type:Boolean,
+        default:true,
+    },
+    
     
 
 },{timestamps: true});
