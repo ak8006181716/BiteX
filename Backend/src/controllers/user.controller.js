@@ -1,61 +1,47 @@
-import {User} from "../models/user.model.js"
 import asyncHandler from "../utils/asyncHandler.js";
-import apiError from "../utils/ApiError.js";
-import apiResponse from "../utils/ApiResponse.js";  
+import apiResponse from "../utils/ApiResponse.js";
+import {
+  registerUserService,
+  loginUserService,
+  logoutUserService,
+  getUserProfileService,
+} from "../services/user.service.js";
 
 
 
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { email, password, firstName, lastName,phone } = req.body;
-  console.log(req.body)
-  if(!email || !password || !firstName || !lastName || !phone) throw new apiError(400, "All fields are required");
-
-
-  const pastuser= await User.findOne({email});
-  if(pastuser) throw new apiError(400, "User already exists with this email");
-
-  const user = await User.create({email,password,firstName,lastName,phone})
-  if(!user) throw new apiError(500, "Error while registering the user");
+  const user = await registerUserService(req.body);
 
   return res.status(201)
-  .cookie("token", user.generateAccessToken(), {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-  })
-  .json(new apiResponse(200, user, "User registered successfully"));
-
+    .cookie("token", user.generateAccessToken(), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    })
+    .json(new apiResponse(200, user, "User registered successfully"));
 });
 
 const loginUser = asyncHandler(async (req, res, next) => {
-const {email, password} = req.body;
-if(!email || !password) throw new apiError(400,"Email and Password are required");
-  const user = await User.findOne({email}).select("+password");
-  if(!user) throw new apiError(400, "User not found");
-  
-  const isMatch = await user.isPasswordCorrect(password);
-  if(!isMatch) throw new apiError(400,"Wrong password");
+  const user = await loginUserService(req.body);
 
   return res
-  .status(201)
-  .cookie("token",user.generateAccessToken(),{
-    httpOnly:true,
-    secure: process.env.NODE_ENV === "production",
-  })
-  .json(new apiResponse(200, user, "User logged in  successfully"));
+    .status(201)
+    .cookie("token", user.generateAccessToken(), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    })
+    .json(new apiResponse(200, user, "User logged in successfully"));
 });
 
 const logoutUser = asyncHandler(async (req, res, next) => {
+  await logoutUserService();
   res.clearCookie("token");
   return res.status(200).json(new apiResponse(200, null, "User logged out successfully"));
-})
+});
 
 const getUserProfile = asyncHandler(async (req, res, next) => {
-
-    const id = req.user._id;
-    if(!id) throw new apiError(400,"User Id is required");
-    const user = await User.findById(id).select("-password");
-    return res.status(200).json(new apiResponse(200, user, "User profile retrieved successfully"));
+  const user = await getUserProfileService(req.user?._id);
+  return res.status(200).json(new apiResponse(200, user, "User profile retrieved successfully"));
 });
 
 
