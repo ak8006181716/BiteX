@@ -24,7 +24,3 @@ result => {
     "url": "https://res.cloudinary.com/ankityoutubeclone/image/upload/v1786127293/BiteX/avatar/1786127287337_-_761014920_2214087306049094_6165669099540930856_n.jpg"
 }
 
-
-CLOUDINARY_CLOUD_NAME=ankityoutubeclone
-CLOUDINARY_API_KEY=477257914466488
-CLOUDINARY_API_SECRET=oNz56BzzAXqMWNtFUMFjSnw6muw
