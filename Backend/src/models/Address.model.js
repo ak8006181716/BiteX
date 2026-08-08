@@ -30,6 +30,14 @@ const addressSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
+    latitude:{
+        type:String,
+        required:true,
+    },
+    longitude:{
+        type:String,
+        required:true,
+    },
     landmark:{
         type: String,
         trim: true,

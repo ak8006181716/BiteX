@@ -37,10 +37,22 @@ const deleteRestaurant = asyncHandler(async (req, res, next) => {
     return res.status(200).json(new apiResponse(200, null, "Restaurant deleted successfully"));
 });
 
+const getAllRestaurant = asyncHandler(async(req,res,next)=>{
+    const allRestaurant = await getAllRestaurantServices();
+
+    return res.status(200).json(new apiResponse(200,allRestaurant,"All Restaurants !"));
+})
+
+const getMyRestaurant = asyncHandler(async(req,res,next)=>{
+    const myRestaurant = await getMyRestaurantServices(req.params.id);
+    return res.status(200).json(new apiResponse(200, myRestaurant, "Restaurant "))
+})
+
 
 export {
     createrestaurant,
     getRestaurantById,
     updateRestaurant,
-    deleteRestaurant
+    deleteRestaurant,
+    getAllRestaurant
 }

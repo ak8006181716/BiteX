@@ -54,6 +54,12 @@ const updateUserProfile = asyncHandler(async(req,res,next)=>{
 
 })
 
+const deleteUser = asyncHandler(async(req,res,next)=>{
+  const user =await deleteUserServices(req.user._id)
+
+  return res.status(200).json(new apiResponse(200,"user delete"));
+})
+
 
 
 

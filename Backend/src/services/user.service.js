@@ -92,10 +92,22 @@ const updatePasswordServices = async ({userid, oldPassword, newPassword, confirm
 
 }
 
+
+const deleteUserServices = async(userId)=>{
+  if(!userId) throw new apiError(401, "Unauthorized")
+    const user = await User.findByIdAndDelete(userId);
+  if(!user) throw new ApiError(404, "User not found");
+
+  return user;
+}
+
+
+
 export {
   registerUserService,
   loginUserService,
   logoutUserService,
   getUserProfileService,
-  updateUserProfileServices
+  updateUserProfileServices,
+  deleteUserServices
 };
