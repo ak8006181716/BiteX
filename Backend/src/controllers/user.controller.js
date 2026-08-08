@@ -1,10 +1,12 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import apiResponse from "../utils/ApiResponse.js";
+
 import {
   registerUserService,
   loginUserService,
   logoutUserService,
   getUserProfileService,
+  updateUserProfileServices,
 } from "../services/user.service.js";
 
 
@@ -43,6 +45,14 @@ const getUserProfile = asyncHandler(async (req, res, next) => {
   const user = await getUserProfileService(req.user?._id);
   return res.status(200).json(new apiResponse(200, user, "User profile retrieved successfully"));
 });
+
+const updateUserProfile = asyncHandler(async(req,res,next)=>{
+  const user = await updateUserProfileServices(req.params.id, req.body,req.file)
+
+  return res.status(200)
+    .json(new apiResponse(200,user,"user update successfully"));
+
+})
 
 
 

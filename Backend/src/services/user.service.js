@@ -1,5 +1,10 @@
 import { User } from "../models/User.model.js";
 import apiError from "../utils/ApiError.js";
+import {
+  uploadToCloudinary,
+  deleteFileOnCloudinary
+} from "../config/cloudinary.js";
+
 
 const registerUserService = async ({ email, password, firstName, lastName, phone }) => {
   if (!email || !password || !firstName || !lastName || !phone) {
@@ -52,9 +57,45 @@ const getUserProfileService = async (userId) => {
   return user;
 };
 
+
+const updateUserProfileServices = async (userid, updates, file) => {
+  if (!userid) throw new apiError(400, "user ID required!");
+  const oldUser = await User.findById(userid);
+  if (!oldUser) throw new apiError(404, "User not found!")
+  if (file) {
+    const uploadImage = await uploadToCloudinary(file.path, "avatar");
+    if (!uploadImage) throw new apiError(500, "Error in uploading file on cloudinary");
+    updates.avatar = uploadImage.secure_url
+    updates.avatarPublicId = uploadImage.public_id
+  }
+  const UpdatedUser = await User.findByIdAndUpdate(userid, updates, { new: true, runValidators: true, });
+  if (oldUser.avatarPublicId) {
+    const deletefile = await deleteFileOnCloudinary(oldUser.avatarPublicId)
+    if (deletefile !== "ok") throw new apiError(500, "server Error old file not delete !");
+  }
+
+  return UpdatedUser;
+}
+
+const updatePasswordServices = async ({userid, oldPassword, newPassword, confirmPassword})=>{
+  if(!userid) throw new apiError(404, "invalid userId");
+  if(!oldPassword||!newPassword||!confirmPassword) throw new apiError(400, "old password , new password, and confirm password required");
+  if(newPassword !== confirmPassword) throw new apiError(400, "new password or confirm password are not same!");
+  if(oldPassword===newPassword) throw new apiError(400,"new password must be different from the old password");
+  const user = await User.findById(userid);
+  if(!user)throw new apiError(404,"user not found")
+  const checkPass = await user.isPasswordCorrect(oldPassword);
+  if(!checkPass) throw new apiError(401,"Wrong Password");
+  user.password = newPassword
+  await user.save()
+  return user;
+
+}
+
 export {
   registerUserService,
   loginUserService,
   logoutUserService,
   getUserProfileService,
+  updateUserProfileServices
 };

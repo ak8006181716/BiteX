@@ -41,11 +41,6 @@ const updateMenuService = async (menuId, updates) => {
     throw new apiError(400, "Menu ID is required");
   }
 
-  const existingMenu = await Menu.findById(menuId);
-  if (!existingMenu) {
-    throw new apiError(404, "Menu not found");
-  }
-
   const { name, description } = updates;
 
   const updatedMenu = await Menu.findByIdAndUpdate(

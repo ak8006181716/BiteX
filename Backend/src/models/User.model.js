@@ -35,6 +35,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    avatarPublicId:{
+      type:String,
+      default:""
+    },
     role: {
       type: String,
       enum: ["customer", "restaurantOwner", "deliveryPartner", "admin"],
@@ -48,6 +52,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    Addresses:[{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Address"
+    }],
     isActive: {
       type: Boolean,
       default: true,
@@ -72,12 +80,13 @@ userSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
+
+
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     {
       _id: this._id,
       email: this.email,
-      firstName: this.firstName,
       role: this.role,
     },
     process.env.ACCESS_TOKEN_SECRET,
