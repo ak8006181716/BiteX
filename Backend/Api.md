@@ -1,18 +1,15 @@
 # working APIS
 
 # API                                      Status
-Create Restaurant	                     - Done
-Get Restaurant By ID	                 - Done
-Get All Restaurants	                     - Done
-Update Restaurant	                     - Done
-Delete/Deactivate Restaurant             - Done
-Get My Restaurant	                     - pending
-Change Restaurant Status	             - pending
-Get Restaurant Menu	                     - pending
+Get My Cart	                             - Done
+Add Item to Cart	                     - Working
+Update Cart Item Quantity                - Pending
+Remove Item from Cart	                 - Pending
+Clear Cart	                             - Pending 
+Get Cart Total	                         - Pending
 
 
-
-🏪 Restaurant APIs
+🏪 Restaurant APIs ✅
 #	API                             Who can use it	            Purpose
 1	Create Restaurant	            Restaurant Owner	        Register/create their restaurant
 2	Get Restaurant By ID	        Public	                    View restaurant details
@@ -25,7 +22,7 @@ Get Restaurant Menu	                     - pending
 
 
 
-🛒 Cart APIs
+🛒 Cart APIs -- Working 
 #	API	                            Purpose
 1	Get My Cart	                    Get the logged-in user's current cart
 2	Add Item to Cart	            Add a menu/dish item

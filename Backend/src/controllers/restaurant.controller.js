@@ -2,9 +2,13 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import apiResponse from "../utils/apiResponse.js";
 import {
     createRestaurantService,
-    getRestaurantByIdService,
-    updateRestaurantService,
-    deleteRestaurantService,
+  getRestaurantByIdService,
+  updateRestaurantService,
+  deleteRestaurantService,
+  getAllRestaurantServices,
+  getMyRestaurantServices,
+  changeRestaurantStausService,
+  getRestaurantMenuService,
 } from "../services/restaurant.service.js";
 
 
@@ -38,21 +42,35 @@ const deleteRestaurant = asyncHandler(async (req, res, next) => {
 });
 
 const getAllRestaurant = asyncHandler(async(req,res,next)=>{
-    const allRestaurant = await getAllRestaurantServices();
+    const allRestaurant = await getAllRestaurantServices(req.query.search,req.query.limit,req.query.page);
 
     return res.status(200).json(new apiResponse(200,allRestaurant,"All Restaurants !"));
 })
 
 const getMyRestaurant = asyncHandler(async(req,res,next)=>{
-    const myRestaurant = await getMyRestaurantServices(req.params.id);
+    const myRestaurant = await getMyRestaurantServices(req.user._id,req.params.id);
     return res.status(200).json(new apiResponse(200, myRestaurant, "Restaurant "))
 })
 
+const changeRestaurantStaus = asyncHandler(async (req,res,next)=>{
+    const Status = await changeRestaurantStausService(req.user.id,req.params.restaurantId);
+
+    return res.status(200).json(new apiResponse(200,Status,"Restaurant Status is changed"));
+})
+
+const getRestaurantMenu = asyncHandler(async (req,res,next)=>{
+    const getMenu = await getRestaurantMenuService(req.user.id,req.params.restaurantId)
+
+    return res.status(200).json(new apiResponse(200,getMenu,"Menu fetched successfully"))
+})
 
 export {
     createrestaurant,
     getRestaurantById,
     updateRestaurant,
     deleteRestaurant,
-    getAllRestaurant
+    getAllRestaurant,
+    getMyRestaurant,
+    changeRestaurantStaus,
+    getRestaurantMenu,
 }
