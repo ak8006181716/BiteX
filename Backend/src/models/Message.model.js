@@ -42,20 +42,6 @@ const messageSchema = new mongoose.Schema(
 const Message = mongoose.model("Message", messageSchema);
 
 export { Message };
-import mongoose from "mongoose";
 
-const messageSchema = new mongoose.Schema({
-    sender:{
-        type:mongoose.Schema.Types.ObjectId,    
-    ref:'User',
-    required:true,
-    },
-    content:{
-        type:String,
-        required:true,
-        trim:true,
-    },
-    
-}, {timestamps: true}); 
 
 

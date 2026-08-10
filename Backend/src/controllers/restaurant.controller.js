@@ -1,5 +1,5 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
-import apiResponse from "../utils/apiResponse.js";
+import apiResponse from "../utils/ApiResponse.js";
 import {
     createRestaurantService,
   getRestaurantByIdService,
