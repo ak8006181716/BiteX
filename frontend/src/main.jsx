@@ -8,6 +8,6 @@ import { Agentation } from "agentation";
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
-     {process.env.NODE_ENV === "development" && <Agentation />}
+    {import.meta.env.DEV && <Agentation />}
   </StrictMode>,
 )

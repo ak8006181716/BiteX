@@ -7,10 +7,8 @@ import {
   logoutUserService,
   getUserProfileService,
   updateUserProfileServices,
+  deleteUserServices,
 } from "../services/user.service.js";
-
-
-
 
 const registerUser = asyncHandler(async (req, res) => {
   const user = await registerUserService(req.body);
@@ -20,14 +18,13 @@ const registerUser = asyncHandler(async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
     })
-    .json(new apiResponse(200, user, "User registered successfully"));
+    .json(new apiResponse(201, user, "User registered successfully"));
 });
 
-const loginUser = asyncHandler(async (req, res, next) => {
+const loginUser = asyncHandler(async (req, res) => {
   const user = await loginUserService(req.body);
 
-  return res
-    .status(201)
+  return res.status(200)
     .cookie("token", user.generateAccessToken(), {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -35,11 +32,12 @@ const loginUser = asyncHandler(async (req, res, next) => {
     .json(new apiResponse(200, user, "User logged in successfully"));
 });
 
-const logoutUser = asyncHandler(async (req, res, next) => {
+const logoutUser = asyncHandler(async (req, res) => {
   await logoutUserService();
   res.clearCookie("token");
   return res.status(200).json(new apiResponse(200, null, "User logged out successfully"));
 });
+
 
 const getUserProfile = asyncHandler(async (req, res, next) => {
   const user = await getUserProfileService(req.user?._id);
@@ -57,7 +55,7 @@ const updateUserProfile = asyncHandler(async(req,res,next)=>{
 const deleteUser = asyncHandler(async(req,res,next)=>{
   const user =await deleteUserServices(req.user._id)
 
-  return res.status(200).json(new apiResponse(200,"user delete"));
+  return res.status(200).json(new apiResponse(200, user, "user delete"));
 })
 
 
@@ -67,5 +65,7 @@ export {
   loginUser,
   registerUser,
   logoutUser,
-  getUserProfile
+  getUserProfile,
+  updateUserProfile,
+  deleteUser,
 }
